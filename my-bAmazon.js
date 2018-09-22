@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+var chalk = require("chalk");
 const log = console.log;
 var productsForSale
 
@@ -24,13 +25,20 @@ connection.connect(function (err) {
   tableUpdate();
 });
 
-
+function displayItems() {
+  for (let i = 0; i = productsForSale.length; i++) {
+    log(chalk.yellow("Product ID: " + productsForSale[i].id));
+    log(chalk.green("Product: " + productsForSale[i].name));
+    log(chalk.#ADD8E6("$" + productsForSale[i].price));
+    log("************************");
+  }
+}
 function tableUpdate() {
   var query = connection.query(
-    "SELECT id,name, price FROM products",
+    "SELECT * FROM products",
     function (err, res) {
       productsForSale = res;
-      log(productsForSale);
+      displayItems();
       createOrder();
     }
   )
@@ -50,19 +58,62 @@ function createOrder() {
     }
   ]).then(function (res) {
 
-    placeOrder(res.product, res.quantity)
+    placeOrder(parseInt(res.product), parseInt(res.quantity));
 
   })
 }
 
 function placeOrder(inputId, quantity) {
+  let desiredProduct;
   let productExists = false;
-  for (let i = 0, i < productsForSale.length; i++ ) {
-    if (productsForSale[i].id === inputId){
-        return productExists = true;
+  for (let i = 0; i < productsForSale.length; i++) {
+    if (productsForSale[i].id === inputId) {
+      desiredProduct = productsForSale[i];
+      productExists = true;
     }
   }
-  if(productExists === false){
+  if (productExists === false) {
     log("I'm sorry, we do not carry this item.")
   }
+  else {
+    if (quantity <= desiredProduct.stock) {
+      log("Your order has been placed.");
+      desiredProduct.stock -= quantity;
+      uploadChanges(desiredProduct.stock, desiredProduct.id)
+    }
+    else {
+      log("Try a different quantity");
+    }
+  }
+}
+
+function uploadChanges(stock, id) {
+  log(stock);
+  log(id);
+  var query = connection.query(
+    "UPDATE products SET stock = ? WHERE id = ?", [stock, id],
+    function (err, res) {
+      log(err);
+      log("Data base updated");
+      reOrder();
+    }
+  )
+}
+
+function reOrder() {
+  inquirer.prompt([
+    {
+      name: "order",
+      type: "confirm",
+      message: "Would you like to order anything else?"
+    }
+  ]).then(function (response) {
+    if (response.order === true) {
+      displayItems();
+      createOrder();
+    }
+    else {
+      log("Thanks for shopping bAmazon");
+    }
+  })
 }
