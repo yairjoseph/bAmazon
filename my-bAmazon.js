@@ -29,7 +29,7 @@ function displayItems() {
   for (let i = 0; i = productsForSale.length; i++) {
     log(chalk.yellow("Product ID: " + productsForSale[i].id));
     log(chalk.green("Product: " + productsForSale[i].name));
-    log(chalk.#ADD8E6("$" + productsForSale[i].price));
+    log(chalk.blue("$" + productsForSale[i].price));
     log("************************");
   }
 }
@@ -117,3 +117,4 @@ function reOrder() {
     }
   })
 }
+
