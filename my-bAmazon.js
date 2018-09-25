@@ -2,8 +2,7 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 var chalk = require("chalk");
 const log = console.log;
-var productsForSale
-
+var productsForSale;
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -26,7 +25,7 @@ connection.connect(function (err) {
 });
 
 function displayItems() {
-  for (let i = 0; i = productsForSale.length; i++) {
+  for (let i = 0; i < productsForSale.length; i++) {
     log(chalk.yellow("Product ID: " + productsForSale[i].id));
     log(chalk.green("Product: " + productsForSale[i].name));
     log(chalk.blue("$" + productsForSale[i].price));
@@ -73,13 +72,19 @@ function placeOrder(inputId, quantity) {
     }
   }
   if (productExists === false) {
-    log("I'm sorry, we do not carry this item.")
+    log("\n");
+    log(chalk.yellow("I'm sorry, we do not carry this item." + "\n"));
+    reOrder();
   }
   else {
     if (quantity <= desiredProduct.stock) {
-      log("Your order has been placed.");
+      log("\n");
+      log(chalk.yellow("Your order has been placed."  + "\n"));
+      desiredProduct.productsales += desiredProduct.price*quantity;
+      log(chalk.green("Order Total: " + desiredProduct.productsales + "\n"));
       desiredProduct.stock -= quantity;
-      uploadChanges(desiredProduct.stock, desiredProduct.id)
+      desiredProduct.productsales += desiredProduct.price*quantity;
+      uploadChanges(desiredProduct.stock, desiredProduct.productsales, desiredProduct.id);
     }
     else {
       log("Try a different quantity");
@@ -87,19 +92,18 @@ function placeOrder(inputId, quantity) {
   }
 }
 
-function uploadChanges(stock, id) {
-  log(stock);
-  log(id);
+function uploadChanges(stock, productsales, id) {
+  // log(stock);
+  // log(id);
   var query = connection.query(
-    "UPDATE products SET stock = ? WHERE id = ?", [stock, id],
+    "UPDATE products SET stock = ?, productsales = ? WHERE id = ?", [stock, productsales, id],
     function (err, res) {
-      log(err);
-      log("Data base updated");
+      // log(err);
+      // log("Data base updated");
       reOrder();
     }
   )
 }
-
 function reOrder() {
   inquirer.prompt([
     {
@@ -114,6 +118,7 @@ function reOrder() {
     }
     else {
       log("Thanks for shopping bAmazon");
+      connection.end();
     }
   })
 }

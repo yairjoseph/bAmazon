@@ -2,6 +2,7 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 var chalk = require("chalk");
 const log = console.log;
+
 var productsForSale;
 
 
@@ -34,13 +35,14 @@ function displayTable() {
         }
     )
 }
+
 function displayItems() {
     for (let i = 0; i < productsForSale.length; i++) {
         log("\n");
-        log(chalk.yellow("Product ID: " + productsForSale[i].id + "\n"));
-        log(chalk.green("Product: " + productsForSale[i].name + "\n"));
-        log(chalk.blue("$" + productsForSale[i].price + "\n"));
-        log(chalk.red("Stock: " + productsForSale[i].stock + "\n"));
+        log(chalk.yellow("Product ID: " + productsForSale[i].id));
+        log(chalk.green("Product: " + productsForSale[i].name));
+        log(chalk.blue("$" + productsForSale[i].price));
+        log(chalk.red("Stock: " + productsForSale[i].stock));
         log("************************" + "\n");
     }
 }
@@ -86,6 +88,7 @@ function addInventory() {
         if (productExists === false) {
             log("\n");
             log("I'm sorry, we do not carry this item." + "\n")
+            displayMenu();
         }
         else {
             quantity <= desiredProduct.stock
@@ -148,11 +151,11 @@ function newProduct() {
                 // log(err);
                 // log("Inventory has been updated");
                 log("\n");
-                log("Your New Item Has Been Successfully added!" + "\n");
-                log(chalk.yellow("Product: " + name + "\n"));
-                log(chalk.blue("$" + price + "\n"));
-                log(chalk.red("Stock: " + stock + "\n"));
-                log(chalk.green("Added to department: " + department + "\n"));
+                log("Your New Item Has Been Successfully added!");
+                log(chalk.yellow("Product: " + name));
+                log(chalk.blue("$" + price));
+                log(chalk.red("Stock: " + stock));
+                log(chalk.green("Added to department: " + department));
                 log("************************" + "\n");
                 displayTable();
             }
@@ -165,7 +168,7 @@ function displayMenu() {
             name: "menu",
             type: "list",
             message: "Choose an action",
-            choices: ["View Products For Sale", "View Low Inventory", "Add To Inventory", "Add New Product"]
+            choices: ["View Products For Sale", "View Low Inventory", "Add To Inventory", "Add New Product", "Exit"]
         }
     ]).then(function (response) {
         switch (response.menu) {
@@ -189,6 +192,7 @@ function displayMenu() {
                 break;
             case "Exit":
                 connection.end();
+                log(chalk.green("Thank You For Shopping bAmazon" + "\n"));
                 break;
         }
     })

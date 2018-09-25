@@ -38,4 +38,29 @@ INSERT INTO products
 (name, department, price, stock)
 VALUES ("Passport Wallet", "Luggage and Travel", 17.99, 600);
 
-SELECT  * FROM products
+
+
+INSERT INTO departments
+(department, overheadcosts)
+VALUES ("Luggage and Travel", 10000);
+
+INSERT INTO departments
+(department, overheadcosts)
+VALUES ("Outdoor", 13000);
+
+INSERT INTO departments
+(department, overheadcosts)
+VALUES ("Home Goods", 11000);
+
+INSERT INTO departments
+(department, overheadcosts)
+VALUES ("Electronics", 15000);
+
+INSERT INTO departments
+(department, overheadcosts)
+VALUES ("Office Supplies", 9000);
+
+
+
+
+SELECT  * FROM departments
