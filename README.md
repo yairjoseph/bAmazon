@@ -12,3 +12,13 @@ New Product
 View Stock
 ![Manager Stock Info](images/stock-info.png)
 
+Data Base Schema
+![Schema](images/schema.png)
+
+Products Data Base Insert
+![products](images/table-insert.png)
+
+
+Departments Data Base Insert
+![departments](images/table-insert2.png)
+
