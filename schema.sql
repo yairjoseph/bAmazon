@@ -25,9 +25,15 @@ SELECT * FROM departments;
 
 SELECT * FROM products;
 
+
 SELECT departments.department_id, departments.department, departments.overheadcosts, products.productsales
 FROM products
-INNER JOIN departments ON departments.department = products.department;
+INNER JOIN departments ON departments.department = products.department
+
+SELECT departments.department_id, departments.department, departments.overheadcosts, products.productsales FROM departments,products;
+
+
+
 
 
 
