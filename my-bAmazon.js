@@ -87,7 +87,9 @@ function placeOrder(inputId, quantity) {
       uploadChanges(desiredProduct.stock, desiredProduct.productsales, desiredProduct.id);
     }
     else {
-      log("Try a different quantity");
+      log("\n");
+      log(chalk.green("Try a different quantity" + "\n"));
+      createOrder();
     }
   }
 }
@@ -117,7 +119,8 @@ function reOrder() {
       createOrder();
     }
     else {
-      log("Thanks for shopping bAmazon");
+      log("\n");
+      log(chalk.yellow("Thank You for shopping bAmazon" + "\n"));
       connection.end();
     }
   })
